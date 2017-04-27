@@ -1,7 +1,7 @@
 # vm_manager
-Simple tool to start/stop your vm and automatically connect to it with xfreerdp client. Useful for linux users who need quick access to windows-only tools.
+Simple tool to start/stop your vm and automatically connect to it with rdp client. Useful for linux users who need quick access to windows-only tools.
 
-vm_manager.py - script file
+vm_manager.py - script file  
 vm_manager.conf - configuration file
 
 Recommended to use with desktop launcher.
@@ -10,7 +10,7 @@ Recommended to use with desktop launcher.
 * dependencies
     * Python 3.5 and above (not tested with other versions)
     * VirtuaBox and VBoxManage tool available as /usr/bin/VBoxManage
-    * xfreerdp client available as /usr/bin/xfreerdp
+    * any rdp client available
 * ready to use VM with configured
     * RDP server
     * NAT vm network and RDP port forwarding
@@ -20,7 +20,7 @@ Recommended to use with desktop launcher.
 
 vm_manager.conf is ini-like configuration file. Sould always be placed near vm_manager.py file.
 
-All configuration options are mandatory. Current version doesn't have default settings for now.
+All configuration options are mandatory.
 
 ### Configuration options
 
@@ -44,20 +44,8 @@ Start hours when to use timeout.
 End hours when to use timeout. If timeout ends later, vm will be saved at this time.
 
 **Section "rdp"**  
-Defines xfreerdp connection options.  
-
-`host = localhost`  
-Hostname or IP address of target vm.
-
-`port = 53389`  
-RDP port of target vm.
-
-`username = admin`  
-`password = password`  
-RDP credentials.
-  
-`options = /clipboard /f`  
-Additional xfreerdp command line options.
+`callstring = <what to run>`  
+Defines rdp connection command.
 
 **Section "logging"**  
 `level = DEBUG`  

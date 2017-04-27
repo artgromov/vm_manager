@@ -71,7 +71,7 @@ class Locked(Exception):
 
 
 def vbox_get_state(vmname):
-    result = run('/usr/bin/VBoxManage showvminfo {}'.format(vmname), shell=True, stdout=PIPE, stderr=PIPE)
+    result = run('/usr/bin/VBoxManage showvminfo {} | grep State'.format(vmname), shell=True, stdout=PIPE, stderr=PIPE)
     stdout = result.stdout.decode('utf-8')
     regex = re.search('State:\s+([\w\s]*) (\(.*?\))?\n', stdout)
     state = regex.group(1)
@@ -144,9 +144,10 @@ def wait(timeout, days, hours_start, hours_end, control_lock):
             logging.debug('waiting {} minutes left'.format(minutes_left))
 
 
-def rdp_connect(host, port, username, password, options):
+def rdp_connect(callstring):
     logging.info('connecting to vm')
-    run('/usr/bin/xfreerdp  /v:{}:{} /u:{} /p:{} {}'.format(host, port, username, password, options), shell=True, stdout=PIPE, stderr=PIPE)
+    logging.debug('rdp callstring: "{}"'.format(callstring))
+    run(callstring, shell=True, stdout=PIPE, stderr=PIPE)
     logging.debug('rdp session closed')
 
 
@@ -178,11 +179,7 @@ if __name__ == '__main__':
     else:
         logging.debug('seizing control to this process')
         CONTROL_LOCK.seize()
-        rdp_connect(config['rdp']['host'],
-                    config['rdp']['port'],
-                    config['rdp']['username'],
-                    config['rdp']['password'],
-                    config['rdp']['options'])
+        rdp_connect(config['rdp']['callstring'])
         logging.debug('releasing rdp lock')
         RDP_LOCK.release()
 
